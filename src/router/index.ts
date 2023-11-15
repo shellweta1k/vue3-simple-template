@@ -1,7 +1,27 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { routes } from './routes';
-
-export default createRouter({
+import useCookies from '@/utils/useCookies';
+const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+router.beforeEach((to, from, next) => {
+  const { getItem } = useCookies();
+
+  if (getItem('token')) {
+    if (to.path === '/login') {
+      next({ path: '/' });
+    } else {
+      next();
+    }
+  } else {
+    if (to.path === '/login') {
+      next();
+    } else {
+      next(`/login?redirect=${to.path}`);
+    }
+  }
+});
+
+export default router;
