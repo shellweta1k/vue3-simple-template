@@ -16,14 +16,19 @@ router.beforeEach((to, from, next) => {
     } else {
       const { routerList, setRouterList } = routerStore();
       if (routerList.length === 0) {
-        setRouterList().then((list) => {
-          list.map((item) => {
-            router.addRoute(item);
+        setRouterList()
+          .then((list) => {
+            list.map((item) => {
+              router.addRoute(item);
+            });
+            next({ path: to.path, replace: true });
+          })
+          .catch(() => {
+            next(`/login?redirect=${to.path}`);
           });
-          next({ path: to.path, replace: true });
-        });
+      } else {
+        next();
       }
-      next();
     }
   } else {
     if (to.path === '/login') {

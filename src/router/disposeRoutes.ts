@@ -1,13 +1,26 @@
 import layout from '@/layout/index.vue';
 import { RouteRecordRaw } from 'vue-router';
-const loadView = (view: string) => {
-  return () => import(`@/views/${view}.vue`);
-};
+const viewModules = import.meta.glob('../views/**/*.{vue,tsx}');
+
+function dynamicImport(dynamicViewsModules: Record<string, Function>, component: string) {
+  const keys = Object.keys(dynamicViewsModules);
+  const matchKeys = keys.filter((key) => {
+    const k = key.replace(/..\/views|../, '');
+    return k.startsWith(`${component}`) || k.startsWith(`/${component}`);
+  });
+  if (matchKeys?.length === 1) {
+    const matchKey = matchKeys[0];
+    return dynamicViewsModules[matchKey];
+  }
+  if (matchKeys?.length > 1) {
+    return false;
+  }
+}
 
 function dataConvertRoute(item: defaultObj): RouteRecordRaw {
   let { path, component, children, ...meta } = item;
   const name = path;
-  component = component ? loadView(component) : layout;
+  component = component ? dynamicImport(viewModules, component) : layout;
   path = path ? '/' + path : path;
   return {
     name,
