@@ -13,7 +13,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
@@ -23,7 +24,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["element-plus/global"]
+    "types": ["element-plus/global", "node"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
