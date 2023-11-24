@@ -18,7 +18,8 @@ export const useAsideItem = defineComponent({
         useSvgIcon
     },
     setup(props) {
-        const {icon, menuName, showTitle} = props.meta
+        const {showTitle, meta} = props
+        const {icon, menuName} = meta
         return () => (
             <>
                 <div class={style.asideItem}>

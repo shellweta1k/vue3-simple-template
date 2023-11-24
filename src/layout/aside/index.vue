@@ -11,7 +11,7 @@
         </el-menu>
       </el-scrollbar>
     </div>
-    <div class="child-route" v-if="currentRoute && currentRoute.children.length > 1">
+    <div class="child-route" v-if="asideExpend && currentRoute && currentRoute.children.length > 1">
       <div class="logo-block"></div>
       <div class="route-content">
         <span class="parent-route-title">
@@ -36,11 +36,15 @@
 <script lang="ts" setup>
   import { computed, nextTick, ref } from 'vue';
   import { routerStore } from '@/store/module/routerStroe';
+  import { settingStore } from '@/store/module/settingStore';
+  import { storeToRefs } from 'pinia';
   import { useAsideItem } from './asideItem';
   import { useRoute } from 'vue-router';
+  const unExpendRoute = ['/'];
   const _route_ = useRoute();
   let { routerList } = routerStore();
-
+  const { asideExpend } = storeToRefs(settingStore());
+  const { setAsideExpend } = settingStore();
   let currentRoute = ref<any>(null);
   const moveShade = (routes: typeof routerList, activeRoute: (typeof routerList)[0]) => {
     const activeIndex = routes.findIndex((item) => item.path === activeRoute.path);
@@ -57,7 +61,7 @@
   const activeRout = computed(() => {
     const { meta = {} } = _route_;
     const result = filterHidden.value.find((item) => item.meta?.menuId === meta?.parentId);
-    console.log('result', result);
+    setAsideExpend(!unExpendRoute.some((item) => item === result?.path));
     currentRoute.value = result;
     nextTick(() => {
       moveShade(filterHidden.value, result!);

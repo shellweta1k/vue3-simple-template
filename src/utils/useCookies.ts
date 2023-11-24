@@ -47,7 +47,7 @@ function useCookies() {
       (secure ? '; secure' : '');
     return true;
   };
-  const removeItem = function (key: string, path: string, domain: string) {
+  const removeItem = function (key: string, path: string = '', domain: string = '') {
     if (!key || !hasItem(key)) {
       return false;
     }

@@ -6,4 +6,7 @@ import 'virtual:svg-icons-register';
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import pinia from './store';
-createApp(App).use(router).use(pinia).use(ElementPlus).mount('#app');
+import PageTool from '@/components/PageTool/index.vue';
+const app = createApp(App);
+app.component('PageTool', PageTool);
+app.use(router).use(pinia).use(ElementPlus).mount('#app');
